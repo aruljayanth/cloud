@@ -15,7 +15,7 @@ var con = mysql.createConnection({
   host: "first.ckl4m0awsivc.us-east-1.rds.amazonaws.com", user: "cse17008",
   password: "oracle123",
   port: "3306",
-  database: "innodb"
+  database: "firstone"
 });
 
 app.post('/', function(req , res){
