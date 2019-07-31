@@ -18,6 +18,7 @@ var con = mysql.createConnection({
   database: "Firstone"
 });
 
+
 app.post('/', function(req , res){
   console.log(req.body.firstname);
   if(req.body==''){
@@ -32,7 +33,7 @@ app.post('/', function(req , res){
       if (err) throw err;
       console.log("Connected!");
       try{
-        con.query("insert into users values(?,?,?,?)", [req.body.firstname,req.body.middlename,req.body.lastname,req.body.age],function (err, result) {
+        con.query("insert into user values(?,?,?,?)", [req.body.firstname,req.body.middlename,req.body.lastname,req.body.age],function (err, result) {
           console.log("Database created");
           console.log(result);
         });
