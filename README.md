@@ -3,6 +3,8 @@ Dependencies:
 
 inside react:
 
+change localhost to ip
+
 npm install
 
 npm install axios --save
