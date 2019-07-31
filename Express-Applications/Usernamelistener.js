@@ -12,8 +12,8 @@ app.use(cors());
 const validnumber = RegExp((/^[0-9]+$/));
 const validletter = RegExp((/^[A-Za-z]+$/));
 var con = mysql.createConnection({
-  host: "endpoint", user: "yourusername",
-  password: "yourpassword",
+  host: "first.ckl4m0awsivc.us-east-1.rds.amazonaws.com", user: "cse17008",
+  password: "oracle123",
   port: "3306",
   database: "innodb"
 });
@@ -32,7 +32,7 @@ app.post('/', function(req , res){
       if (err) throw err;
       console.log("Connected!");
       try{
-        con.query("insert into users values(?,?,?,?)", [req.body.firstname,req.body.lastname,req.body.middlename,req.body.age],function (err, result) {
+        con.query("insert into users values(?,?,?,?)", [req.body.firstname,req.body.middlename,req.body.lastname,req.body.age],function (err, result) {
           console.log("Database created");
           console.log(result);
         });
