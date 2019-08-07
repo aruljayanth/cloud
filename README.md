@@ -20,3 +20,10 @@ npm install cors --save
 npm install mysql
 
 npm install mysqljs/mysql
+
+
+inside s3:
+
+npm init  \\ give yes
+
+npm install aws-sdk
