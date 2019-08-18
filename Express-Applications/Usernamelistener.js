@@ -79,7 +79,7 @@ app.post('/fileupload', function(req, res) {
         };
         s3.upload(params, function(s3Err, data) {
           if (s3Err) {
-              console.log("Error uploading data: ", perr);
+              console.log("Error uploading data: ",s3Err);
             } else {
               console.log("Successfully uploaded data");
             }
