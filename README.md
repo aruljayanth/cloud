@@ -29,7 +29,7 @@ npm install @google-cloud/storage
 
 inside s3:
 
-npm init  \\ give yes
+npm init        \\ give yes
 
 npm install aws-sdk
 
