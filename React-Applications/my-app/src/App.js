@@ -24,7 +24,8 @@ class App extends React.Component{
         firstname: '',
         lastname: '',
         middlename: '',
-        age: ''
+        age: '',
+        fileupload: ''
       }
     };
    }
@@ -82,11 +83,31 @@ class App extends React.Component{
           }
         })
           break;
+      case 'fileupload':
+      const data = new FormData();
+      data.append('file',e.target.files[0]);
+      axios.post('http://localhost:3001/checkfile',data)
+        .then(res => {
+          if(res.data){
+            console.log("true");
+            errors.fileupload = '';
+          }
+          else{
+            console.log("false");
+            errors.fileupload = 'upload file';
+          }
+        })
+      break;
       default:
         break;
     }
+    if(name=='fileupload'){
+      this.setState({errors,[name]:e.target.files[0]});
+    }
+    else{
+      this.setState({errors, [name]: value});
+    }
 
-    this.setState({errors, [name]: value});
   }
 
   handleSubmit = e => {
@@ -95,14 +116,25 @@ class App extends React.Component{
       firstname: this.state.firstname,
       lastname: this.state.lastname,
       middlename: this.state.middlename,
-      age: this.state.age
+      age: this.state.age,
+      file: this.state.fileupload
     };
     console.log(user.firstname);
     if(validateForm(this.state.errors)) {
       axios.post(`http://localhost:3001/`,user)
         .then(res => {
           if(res.data){
-            alert('Data sent');
+            const data = new FormData();
+            data.append('file',this.state.fileupload);
+            axios.post('http://localhost:3001/fileupload',data)
+              .then(res => {
+                if(res.data){
+                  alert('Data sent');
+                }
+                else{
+                  alert('Data not sent');
+                }
+              });
           }
           else{
             alert('Data not sent');
@@ -147,6 +179,12 @@ class App extends React.Component{
           <span className='error'>{errors.age}</span>}
       </div>
       <br/>
+      <div className='fileupload'>
+        <label htmlFor="fileupload">File Upload:</label>
+        <input type='file' id='fileupload' name='fileupload' accept="image/png, image/jpeg" onChange={this.handleChange} onBlur={this.handleChange}/>
+        {errors.fileupload.length > 0 &&
+          <span className='error'>{errors.fileupload}</span>}
+      </div>
       <br/>
       <div className='submit'>
         <button>Submit</button>
