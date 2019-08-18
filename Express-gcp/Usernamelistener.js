@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var busboy = require('connect-busboy');
 const AWS = require('aws-sdk');
+const {Storage} = require('@google-cloud/storage');
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -14,12 +15,15 @@ app.use(busboy());
 
 const validnumber = RegExp((/^[0-9]+$/));
 const validletter = RegExp((/^[A-Za-z]+$/));
-const publicKey = ''; // Update the keys
-const secretKey = '';
-const sessionToken = '';
-const s3 = new AWS.S3(
- {accessKeyId: publicKey, secretAccessKey: secretKey, sessionToken: sessionToken}
-);
+
+const GOOGLE_CLOUD_PROJECT_ID = 'cloud-247808'; // Replace with your project ID
+const GOOGLE_CLOUD_KEYFILE = 'cloud-247808-32ec0a8bb37c.json'; // Replace with the path to the downloaded private key
+
+
+const storage = new Storage({
+    projectId: GOOGLE_CLOUD_PROJECT_ID,
+    keyFilename: GOOGLE_CLOUD_KEYFILE,
+  });
 
 var con = mysql.createConnection({
   host: "database-1.ckl4m0awsivc.us-east-1.rds.amazonaws.com", user: "cse17008",
@@ -27,7 +31,7 @@ var con = mysql.createConnection({
   port: "3306",
   database: "innodb"
 });
-
+var todaysDate = new Date();
 
 app.post('/', function(req , res){
   console.log(req.body.firstname);
@@ -72,21 +76,15 @@ app.post('/fileupload', function(req, res) {
     req.pipe(req.busboy);
     req.busboy.on('file', function (fieldname, file, filename) {
         console.log("Uploading: " + filename);
-        const params = {
-          Bucket: '',
-          Key: (filename),
-          Body: file
-        };
-        s3.upload(params, function(s3Err, data) {
+         fstream = fs.createWriteStream(filename);
+         file.pipe(fstream);
+        storage.bucket('aruljayanth').upload(filename,function(s3Err, data) {
           if (s3Err) {
-              console.log("Error uploading data: ", perr);
+              console.log("Error uploading data: ", s3Err);
             } else {
               console.log("Successfully uploaded data");
             }
-        });
-        // fstream = fs.createWriteStream("/Users/yogeshm/Documents/CloudCourse/Express-Applications/"+filename);
-        // file.pipe(fstream);
-
+          });
         responce=true;
     });
     req.busboy.on('finish', function () {
@@ -105,6 +103,7 @@ app.post('/checkfile',function(req , res){
   });
 
 })
+
 
 //start your server on port 3001
 app.listen(3001, () => {
