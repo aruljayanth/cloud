@@ -101,7 +101,7 @@ class App extends React.Component{
       default:
         break;
     }
-    if(name=='fileupload'){
+    if(name==='fileupload'){
       this.setState({errors,[name]:e.target.files[0]});
     }
     else{
