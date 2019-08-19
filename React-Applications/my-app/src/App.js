@@ -16,15 +16,13 @@ class App extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      firstname: '',
-      lastname: '',
-      middlename: '',
-      age: '',
+      house: '',
+      hname: '',
+      zipcode: '',
       errors: {
-        firstname: '',
-        lastname: '',
-        middlename: '',
-        age: '',
+        house: '',
+        hname: '',
+        zipcode: '',
         fileupload: ''
       }
     };
@@ -39,54 +37,43 @@ class App extends React.Component{
       val: value
     };
     switch (name) {
-      case 'firstname':
-      axios.post(`http://localhost:3001/letters`,validationdata)
+      case 'house':
+      axios.post(`http://107.22.151.34:3001/numbers`,validationdata)
         .then(res => {
           if(res.data){
-            errors.firstname = '';
+            errors.house = '';
           }
           else{
-            errors.firstname = 'Enter only letters';
+            errors.house = 'Enter only numbers';
           }
         })
         break;
-      case 'lastname':
-      axios.post(`http://localhost:3001/letters`,validationdata)
+      case 'hname':
+      axios.post(`http://107.22.151.34:3001/letters`,validationdata)
         .then(res => {
           if(res.data){
-            errors.lastname = '';
+            errors.hname = '';
           }
           else{
-            errors.lastname = 'Enter only letters';
+            errors.hname = 'Enter only letters';
           }
         })
         break;
-      case 'middlename':
-      axios.post(`http://localhost:3001/letters`,validationdata)
+      case 'zipcode':
+      axios.post(`http://107.22.151.34:3001/zip`,validationdata)
         .then(res => {
           if(res.data){
-            errors.middlename = '';
+            errors.zipcode = '';
           }
           else{
-            errors.middlename = 'Enter only letters';
-          }
-        })
-        break;
-      case 'age':
-      axios.post(`http://localhost:3001/numbers`,validationdata)
-        .then(res => {
-          if(res.data){
-            errors.age = '';
-          }
-          else{
-            errors.age = 'Enter only numbers';
+            errors.zipcode = 'enter a number and of 5 digits';
           }
         })
           break;
       case 'fileupload':
       const data = new FormData();
       data.append('file',e.target.files[0]);
-      axios.post('http://localhost:3001/checkfile',data)
+      axios.post('http://107.22.151.34:3001/checkfile',data)
         .then(res => {
           if(res.data){
             console.log("true");
@@ -113,20 +100,19 @@ class App extends React.Component{
   handleSubmit = e => {
     e.preventDefault();
     const user = {
-      firstname: this.state.firstname,
-      lastname: this.state.lastname,
-      middlename: this.state.middlename,
-      age: this.state.age,
+      house: this.state.house,
+      hname: this.state.hname,
+      zipcode: this.state.zipcode,
       file: this.state.fileupload
     };
-    console.log(user.firstname);
+    console.log(user.house);
     if(validateForm(this.state.errors)) {
-      axios.post(`http://localhost:3001/`,user)
+      axios.post(`http://107.22.151.34:3001/`,user)
         .then(res => {
           if(res.data){
             const data = new FormData();
             data.append('file',this.state.fileupload);
-            axios.post('http://localhost:3001/fileupload',data)
+            axios.post('http://107.22.151.34:3001/fileupload',data)
               .then(res => {
                 if(res.data){
                   alert('Data sent');
@@ -150,38 +136,34 @@ class App extends React.Component{
     return (
       <div className="wrapper">
       <form className='form-wrapper' onSubmit={this.handleSubmit}>
-
-      <div className='firstname'>
-        <label htmlFor="firstname">First Name:</label>
-        <input type='letter' name='firstname' onChange={this.handleChange} onBlur={this.handleChange}/>
-        {errors.firstname.length > 0 &&
-          <span className='error'>{errors.firstname}</span>}
+      <h1>House Details</h1>
+      <p><small>*Required</small></p>
+      <br/>
+      <div className='house'>
+        <label htmlFor="house">House No *</label><br/>
+        <input type='number' name='house' onChange={this.handleChange} onBlur={this.handleChange}/>
+        {errors.house.length > 0 &&
+          <span className='error'>{errors.house}</span>}
       </div>
       <br/>
-      <div className='lastname'>
-        <label htmlFor="lastname">Last Name:</label>
-        <input type='text' name='lastname' onChange={this.handleChange} onBlur={this.handleChange}/>
-        {errors.lastname.length > 0 &&
-          <span className='error'>{errors.lastname}</span>}
+      <div className='hname'>
+        <label htmlFor="hname">House Name *</label><br/>
+        <input type='text' name='hname' onChange={this.handleChange} onBlur={this.handleChange}/>
+        {errors.hname.length > 0 &&
+          <span className='error'>{errors.hname}</span>}
       </div>
       <br/>
-      <div className='middlename'>
-        <label htmlFor="middlename">Middle Name:</label>
-        <input type='text' name='middlename' onChange={this.handleChange} onBlur={this.handleChange}/>
-        {errors.middlename.length > 0 &&
-          <span className='error'>{errors.middlename}</span>}
-      </div>
-      <br/>
-      <div className='age'>
-        <label htmlFor="age">Age:</label>
-        <input type='number' name='age' onChange={this.handleChange} onBlur={this.handleChange}/>
-        {errors.age.length > 0 &&
-          <span className='error'>{errors.age}</span>}
+      <div className='zipcode'>
+        <label htmlFor="zipcode">Zipcode *</label>
+        <p><small>zipcode of a city in USA</small></p><br/>
+        <input type='number' name='zipcode' onChange={this.handleChange} onBlur={this.handleChange}/>
+        {errors.zipcode.length > 0 &&
+          <span className='error'>{errors.zipcode}</span>}
       </div>
       <br/>
       <div className='fileupload'>
-        <label htmlFor="fileupload">File Upload:</label>
-        <input type='file' id='fileupload' name='fileupload' accept="image/png, image/jpeg" onChange={this.handleChange} onBlur={this.handleChange}/>
+        <label htmlFor="fileupload">House Photo *</label>
+        <input type='file' id='fileupload' name='fileupload' accept="imzipcode/png, imzipcode/jpeg" onChange={this.handleChange} onBlur={this.handleChange}/>
         {errors.fileupload.length > 0 &&
           <span className='error'>{errors.fileupload}</span>}
       </div>
